@@ -1,0 +1,39 @@
+<resources>
+    <string name="app_name">SOS</string>
+    <string name="title_activity_main2">MainActivity</string>
+    <!-- Strings used for fragments for navigation -->
+    <string name="first_fragment_label">First Fragment</string>
+    <string name="second_fragment_label">Second Fragment</string>
+    <string name="next">Next</string>
+    <string name="previous">Previous</string>
+
+    <string name="hello_first_fragment">Hello first fragment</string>
+    <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
+    <string name="title_activity_maps">Map</string>
+    <string name="title_activity_container_">container_</string>
+
+    <!-- the following is for demonstration sake -->
+    <string-array name="containers">
+        <item>box 1</item>
+        <item>box 2</item>
+        <item>box 3</item>
+    </string-array>
+
+    <string-array name="volumes">
+        <item>100ccm</item>
+        <item>50ccm</item>
+        <item>70ccm</item>
+    </string-array>
+
+    <string-array name="descriptions">
+        <item>bed sheets</item>
+        <item>pots</item>
+        <item>books and stationery</item>
+    </string-array>
+    <string name="title_activity_container_editor">ContainerEditor</string>
+    <!--
+    This string is used for square devices and overridden by hello_world in
+    values-round/strings.xml for round devices.
+    -->
+    <string name="hello_world">Hello Square World!</string>
+</resources>
