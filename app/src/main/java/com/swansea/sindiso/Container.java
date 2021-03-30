@@ -1,18 +1,28 @@
 package com.swansea.sindiso;
 
 public class Container {
-    private final Integer ID;
+    private String label;
+    private String description;
     private Integer length;
     private Integer width;
     private Integer height;
     private Integer volume;
 
-    public Container(Integer ID, Integer l, Integer h, Integer w){
-        this.ID = ID;
+    public Container(String label, Integer l, Integer h, Integer w, String description){
+        this.label = label;
         this.length = l;
         this.height = h;
         this.width = w;
+        this.description = description;
         setVolume();
+    }
+
+    @Override
+    public String toString() {
+        return "Container{" +
+                "label='" + label + '\'' +
+                ", volume=" + volume +
+                '}';
     }
 
     private boolean validUnit(Integer unit){
@@ -25,6 +35,10 @@ public class Container {
 
     public void setVolume(){
         volume = length * width * height;
+    }
+
+    public void setLabel(String label) {
+        this.label = label;
     }
 
     public void setWidth(Integer w){
@@ -43,5 +57,13 @@ public class Container {
         if (validUnit(l)){
             length = l;
         }
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 }

@@ -1,82 +1,117 @@
 package com.swansea.sindiso;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Scanner;
 
 public class MainActivity extends AppCompatActivity {
     private String fileName = "userInformation.txt";
     private boolean loginComplete = false;
+    EditText userEditText;
+    EditText passwordEditText;
+    User user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.login_activity);
-        EditText userEditText = (EditText) findViewById(R.id.userNameTextBox);
-        EditText passwordEditText = (EditText) findViewById(R.id.PasswordTextBox);
+        userEditText = (EditText) findViewById(R.id.userNameTextBox);
+        passwordEditText = (EditText) findViewById(R.id.PasswordTextBox);
         TextView loginOutput = (TextView) findViewById(R.id.loginOutcome);
 
         Button loginBtn = (Button) findViewById(R.id.login_button);
         loginBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String userName = userEditText.getText().toString();
-                String passWord = passwordEditText.getText().toString();
                 try {
-                    loginOutput.setText(loginUser(userName, passWord));
-                } catch (FileNotFoundException e) {
-                    e.printStackTrace();
-                }
-                if(loginComplete){
-                    Intent startIntent = new Intent(MainActivity.this, student_containers.class);
-                    startIntent.putExtra("com.swansea.sindiso.takeUser", userName);
-                    startActivity(startIntent);
+                    String userName = userEditText.getText().toString();
+                    String passWord = passwordEditText.getText().toString();
+                    DataBaseHandler dataBaseHandler = new DataBaseHandler(MainActivity.this);
+                    user = dataBaseHandler.getDetails(userName);
+                    try {
+                        loginOutput.setText(loginUser(user, passWord));
+                    } catch (FileNotFoundException e) {
+                        e.printStackTrace();
+                    }
+                    if (loginComplete) {
+                        if(user.isStudent()){
+                        Intent startIntent = new Intent(MainActivity.this, student_containers.class);
+                        startIntent.putExtra("com.swansea.sindiso.takeUser", user);
+                        startActivity(startIntent);
+                        }
+                    }
+                } catch (Exception e) {
+                    Toast.makeText(MainActivity.this, R.string.missing_input, Toast.LENGTH_SHORT).show();
                 }
             }
         });
 
-        Button registerBtn = (Button) findViewById(R.id.register_button);
-        registerBtn.setOnClickListener(new View.OnClickListener() {
+        Button registerStudentBtn = (Button) findViewById(R.id.register_student_button);
+        registerStudentBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String userName = userEditText.getText().toString();
-                String passWord = passwordEditText.getText().toString();
-                loginOutput.setText(newUser(userName, passWord));
+                try {
+                    String userName = userEditText.getText().toString();
+                    String passWord = passwordEditText.getText().toString();
+                    user = new User(-1, userName, passWord, true);
+                    DataBaseHandler dataBaseHandler = new DataBaseHandler(MainActivity.this);
+                    boolean complete = dataBaseHandler.addUser(user);
+                    if (complete){
+                        loginOutput.setText("Registered Successfully");
+                    } else {
+                        loginOutput.setText("User Already Exists");
+                    }
+                } catch (Exception e) {
+                    Toast.makeText(MainActivity.this, R.string.missing_input, Toast.LENGTH_SHORT).show();
+                    user = new User(-1, "error", "error", false);
+                }
             }
         });
 
-    }
-
-    private String loginUser(String userName, String password) throws FileNotFoundException {
-        String data = readFile(fileName);
-        Scanner users = new Scanner(data);
-        while(users.hasNextLine()){
-            Scanner user = new Scanner(users.nextLine());
-            if(userName.equals(user.next())){
-                if(password.equals(user.next())){
-                    loginComplete = true;
-                    return ("Welcome " + userName);
-                } else {
-                    return ("Incorrect Password");
+        Button registerHolderBtn = (Button) findViewById(R.id.register_holder_button);
+        registerHolderBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                try {
+                    String userName = userEditText.getText().toString();
+                    String passWord = passwordEditText.getText().toString();
+                    user = new User(-1, userName, passWord, false);
+                    DataBaseHandler dataBaseHandler = new DataBaseHandler(MainActivity.this);
+                    boolean complete = dataBaseHandler.addUser(user);
+                    if (complete){
+                        loginOutput.setText("Registered Successfully");
+                    } else {
+                        loginOutput.setText("User Already Exists");
+                    }
+                } catch (Exception e) {
+                    Toast.makeText(MainActivity.this, R.string.missing_input, Toast.LENGTH_SHORT).show();
+                    user = new User(-1, "error", "error", false);
                 }
             }
-        }
-        return ("Incorrect Username and Password");
+        });
     }
 
-    private String newUser(String userName, String Password){
+    private String loginUser(User user, String password) throws FileNotFoundException {
+        if (user.getPassword().equals(password)) {
+            loginComplete = true;
+            return ("Welcome");
+        } else {
+            return ("Incorrect Username and Password");
+        }
+    }
+
+    /*private String newUser(String userName, String Password){
         if (existingUser(userName)){
             return ("Already Existing User");
         }
@@ -91,31 +126,31 @@ public class MainActivity extends AppCompatActivity {
             return ("File not found");
         }
         return ("New User Created");
-    }
+    }*/
 
-    private boolean existingUser(String userName){
+    private boolean existingUser(String userName) {
         String data = readFile(fileName);
         Scanner users = new Scanner(data);
-        while(users.hasNextLine()){
+        while (users.hasNextLine()) {
             Scanner user = new Scanner(users.nextLine());
-            if (userName.equals(user.next())){
+            if (userName.equals(user.next())) {
                 return true;
             }
         }
         return false;
     }
 
-    private String readFile(String fileName){
+    private String readFile(String fileName) {
         StringBuilder sb = new StringBuilder();
-        try{
-          FileInputStream file = openFileInput(fileName);
-          int x;
-          while ((x = file.read()) != -1) {
-              sb.append((char) x);
-          }
+        try {
+            FileInputStream file = openFileInput(fileName);
+            int x;
+            while ((x = file.read()) != -1) {
+                sb.append((char) x);
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return(sb.toString());
+        return (sb.toString());
     }
 }

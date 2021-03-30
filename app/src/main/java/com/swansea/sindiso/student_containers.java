@@ -17,6 +17,8 @@ public class student_containers extends AppCompatActivity {
     String[] containerNames;
     String[] containerDescriptions;
     String[] containerVolumes;
+    Button addContainerBtn;
+    Intent editContainer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,14 +37,15 @@ public class student_containers extends AppCompatActivity {
         containerListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent editContainer = new Intent(getApplicationContext(), ContainerEditor.class);
+                editContainer = new Intent(student_containers.this, ContainerEditor.class);
                 editContainer.putExtra("com.swansea.sindiso.CONTAINER_INDEX", position);
                 startActivity(editContainer);
             }
         });
 
         if (getIntent().hasExtra("com.swansea.sindiso.takeUser")) {
-            studentHeader.setText(getIntent().getExtras().getString("com.swansea.sindiso.takeUser"));
+            User user = getIntent().getParcelableExtra("com.swansea.sindiso.takeUser");
+            studentHeader.setText(user.getUserName());
         }
 
         Button leaveActivityBtn = (Button) findViewById(R.id.leave_activity);
@@ -54,6 +57,15 @@ public class student_containers extends AppCompatActivity {
             }
         });
 
+        addContainerBtn = (Button) findViewById(R.id.add_Container_btn);
+        addContainerBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                editContainer = new Intent(student_containers.this, ContainerEditor.class);
+                //editContainer.putExtra("com.swansea.sindiso.USER_ID", position);
+                startActivity(editContainer);
+            }
+        });
 
     }
 
