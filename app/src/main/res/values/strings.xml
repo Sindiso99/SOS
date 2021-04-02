@@ -38,4 +38,7 @@
     <string name="hello_world">Hello Square World!</string>
     <string name="add_Item">Add New Box</string>
     <string name="missing_input">Please Fill all Fields</string>
+    <string name="cannot_delete">No Item to Delete Here</string>
+    <string name="delete_complete">Box Deleted Successfully</string>
+    <string name="delete_failed">Failed to Delete Box</string>
 </resources>

@@ -88,6 +88,17 @@ public class DataBaseHandler extends SQLiteOpenHelper {
         }
     }
 
+    public boolean deleteContainer(Integer boxId){
+        db = this.getWritableDatabase();
+        query = "DELETE FROM " + CONTAINER_TABLE + " WHERE " + COLUMN_CONTAINER_ID + " = '" + boxId + "'";
+        cursor = db.rawQuery(query, null);
+        if(!cursor.moveToFirst()) {
+            return  true;
+        } else {
+            return false;
+        }
+    }
+
     public User getUserDetails(String name){
         User user;
         query = "SELECT * FROM " + USER_TABLE + " WHERE " + COLUMN_USER_NAME + " = '" + name + "'";
