@@ -10,4 +10,5 @@
     <color name="gold_theme">#E3AD0B</color>
     <color name="text_black">#353535</color>
     <color name="grey_theme">#595959</color>
+    <color name="gold_theme_variant">#916E04</color>
 </resources>

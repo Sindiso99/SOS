@@ -13,10 +13,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.Scanner;
 
-public class MainActivity extends AppCompatActivity {
-    private String fileName = "userInformation.txt";
+public class LoginActivity extends AppCompatActivity {
     private boolean loginComplete = false;
     EditText userEditText;
     EditText passwordEditText;
@@ -26,6 +24,9 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.login_activity);
+
+        DataBaseHandler dataBaseHandler = new DataBaseHandler(LoginActivity.this);
+
         userEditText = (EditText) findViewById(R.id.userNameTextBox);
         passwordEditText = (EditText) findViewById(R.id.PasswordTextBox);
         TextView loginOutput = (TextView) findViewById(R.id.loginOutcome);
@@ -37,8 +38,8 @@ public class MainActivity extends AppCompatActivity {
                 try {
                     String userName = userEditText.getText().toString();
                     String passWord = passwordEditText.getText().toString();
-                    DataBaseHandler dataBaseHandler = new DataBaseHandler(MainActivity.this);
-                    user = dataBaseHandler.getDetails(userName);
+                    DataBaseHandler dataBaseHandler = new DataBaseHandler(LoginActivity.this);
+                    user = dataBaseHandler.getUserDetails(userName);
                     try {
                         loginOutput.setText(loginUser(user, passWord));
                     } catch (FileNotFoundException e) {
@@ -46,13 +47,13 @@ public class MainActivity extends AppCompatActivity {
                     }
                     if (loginComplete) {
                         if(user.isStudent()){
-                        Intent startIntent = new Intent(MainActivity.this, student_containers.class);
+                        Intent startIntent = new Intent(LoginActivity.this, StudentContainers.class);
                         startIntent.putExtra("com.swansea.sindiso.takeUser", user);
                         startActivity(startIntent);
                         }
                     }
                 } catch (Exception e) {
-                    Toast.makeText(MainActivity.this, R.string.missing_input, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(LoginActivity.this, R.string.missing_input, Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -65,7 +66,6 @@ public class MainActivity extends AppCompatActivity {
                     String userName = userEditText.getText().toString();
                     String passWord = passwordEditText.getText().toString();
                     user = new User(-1, userName, passWord, true);
-                    DataBaseHandler dataBaseHandler = new DataBaseHandler(MainActivity.this);
                     boolean complete = dataBaseHandler.addUser(user);
                     if (complete){
                         loginOutput.setText("Registered Successfully");
@@ -73,7 +73,7 @@ public class MainActivity extends AppCompatActivity {
                         loginOutput.setText("User Already Exists");
                     }
                 } catch (Exception e) {
-                    Toast.makeText(MainActivity.this, R.string.missing_input, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(LoginActivity.this, R.string.missing_input, Toast.LENGTH_SHORT).show();
                     user = new User(-1, "error", "error", false);
                 }
             }
@@ -87,7 +87,7 @@ public class MainActivity extends AppCompatActivity {
                     String userName = userEditText.getText().toString();
                     String passWord = passwordEditText.getText().toString();
                     user = new User(-1, userName, passWord, false);
-                    DataBaseHandler dataBaseHandler = new DataBaseHandler(MainActivity.this);
+                    DataBaseHandler dataBaseHandler = new DataBaseHandler(LoginActivity.this);
                     boolean complete = dataBaseHandler.addUser(user);
                     if (complete){
                         loginOutput.setText("Registered Successfully");
@@ -95,7 +95,7 @@ public class MainActivity extends AppCompatActivity {
                         loginOutput.setText("User Already Exists");
                     }
                 } catch (Exception e) {
-                    Toast.makeText(MainActivity.this, R.string.missing_input, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(LoginActivity.this, R.string.missing_input, Toast.LENGTH_SHORT).show();
                     user = new User(-1, "error", "error", false);
                 }
             }
@@ -110,35 +110,7 @@ public class MainActivity extends AppCompatActivity {
             return ("Incorrect Username and Password");
         }
     }
-
-    /*private String newUser(String userName, String Password){
-        if (existingUser(userName)){
-            return ("Already Existing User");
-        }
-        try{
-            FileOutputStream file = openFileOutput(fileName, Context.MODE_APPEND);
-            String user = (userName + " " + Password + "\n");
-            file.write(user.getBytes());
-            file.flush();
-            file.close();
-        } catch(IOException e) {
-            e.printStackTrace();
-            return ("File not found");
-        }
-        return ("New User Created");
-    }*/
-
-    private boolean existingUser(String userName) {
-        String data = readFile(fileName);
-        Scanner users = new Scanner(data);
-        while (users.hasNextLine()) {
-            Scanner user = new Scanner(users.nextLine());
-            if (userName.equals(user.next())) {
-                return true;
-            }
-        }
-        return false;
-    }
+    
 
     private String readFile(String fileName) {
         StringBuilder sb = new StringBuilder();

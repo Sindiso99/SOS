@@ -8,7 +8,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
-        android:layout_marginStart="47dp"
+        android:layout_marginStart="20dp"
         android:layout_marginTop="16dp"
         android:text="ContainerName"
         android:textSize="24sp" />
@@ -27,10 +27,10 @@
         android:id="@+id/volume_TextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="100dp"
-        android:layout_toEndOf="@+id/containerName_TextView"
-        android:text="Volume"
         android:layout_alignBaseline="@id/containerName_TextView"
-        android:textSize="16sp"/>
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="43dp"
+        android:text="Volume"
+        android:textSize="16sp" />
 
 </RelativeLayout>

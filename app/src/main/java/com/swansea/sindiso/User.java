@@ -38,6 +38,10 @@ public class User implements Parcelable {
         containers = new ArrayList<Container>();
     }
 
+    public Integer getId() {
+        return id;
+    }
+
     public String getUserName(){
         return userName;
     }

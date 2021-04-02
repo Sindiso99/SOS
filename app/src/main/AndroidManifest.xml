@@ -33,7 +33,7 @@
             android:value="true" />-->
 
         <activity
-            android:name=".student_containers"
+            android:name=".StudentContainers"
             android:label="@string/title_activity_container_"
             android:theme="@style/Theme.SOS.NoActionBar" />
         <!--
@@ -55,7 +55,7 @@
             android:name=".MainActivity2"
             android:label="@string/title_activity_main2"
             android:theme="@style/Theme.SOS.NoActionBar" />
-        <activity android:name=".MainActivity">
+        <activity android:name=".LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

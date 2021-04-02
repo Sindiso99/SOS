@@ -11,29 +11,42 @@ import androidx.appcompat.app.AppCompatActivity;
 
 public class ContainerEditor extends AppCompatActivity {
 
-    Button leaveActivityBtn;
-    Button saveContainerBtn;
-    EditText labelInput, lengthInput, widthInput, heightInput, descInput;
+    private int ownerId;
+    private Button leaveActivityBtn;
+    private Button saveContainerBtn;
+    private EditText labelInput, lengthInput, widthInput, heightInput, descInput;
+    private Intent intent;
+    private Container container;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_container_editor);
-        Intent intent = getIntent();
-        int position = intent.getIntExtra("com.swansea.sindiso.CONTAINER_INDEX", -1);
-
         labelInput = (EditText) findViewById(R.id.label_Edit);
         lengthInput = (EditText) findViewById(R.id.length_Edit);
         widthInput = (EditText) findViewById(R.id.width_edit);
         heightInput = (EditText) findViewById(R.id.height_edit);
         descInput = (EditText) findViewById(R.id.description_edit);
 
+        if (getIntent().hasExtra("com.swansea.sindiso.studentId")) {
+        ownerId = getIntent().getIntExtra("com.swansea.sindiso.studentId", -1);
+        }
+
+        if (getIntent().hasExtra("com.swansea.sindiso.containerToEdit")) {
+            container = getIntent().getParcelableExtra("com.swansea.sindiso.containerToEdit");
+            labelInput.setText(container.getLabel());
+            lengthInput.setText(container.getLength().toString());
+            widthInput.setText(container.getWidth().toString());
+            heightInput.setText(container.getHeight().toString());
+            descInput.setText(container.getDescription());
+        }
+
         leaveActivityBtn = (Button) findViewById(R.id.leave_editor);
         leaveActivityBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent startIntent = new Intent(ContainerEditor.this, student_containers.class);
-                startActivity(startIntent);
+                intent = new Intent(ContainerEditor.this, StudentContainers.class);
+                startActivity(intent);
             }
         });
 
@@ -42,10 +55,16 @@ public class ContainerEditor extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 try {
-                    Container container = new Container(labelInput.getText().toString(),
+                    container = new Container(-1, labelInput.getText().toString(),
                             Integer.parseInt(lengthInput.getText().toString()), Integer.parseInt(heightInput.getText().toString()),
-                            Integer.parseInt(widthInput.getText().toString()), descInput.getText().toString());
+                            Integer.parseInt(widthInput.getText().toString()), descInput.getText().toString(), ownerId);
                     Toast.makeText(ContainerEditor.this, container.toString(), Toast.LENGTH_SHORT).show();
+                    DataBaseHandler dataBaseHandler = new DataBaseHandler(ContainerEditor.this);
+                    boolean complete = dataBaseHandler.addContainer(container);
+                    if(complete) {
+                        intent = new Intent(ContainerEditor.this, StudentContainers.class);
+                        startActivity(intent);
+                    }
                 } catch (Exception e) {
                     Toast.makeText(ContainerEditor.this, R.string.missing_input, Toast.LENGTH_SHORT).show();
                 }

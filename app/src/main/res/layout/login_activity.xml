@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity">
+    tools:context=".LoginActivity">
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/loginPageToolbar"
@@ -46,7 +46,6 @@
         android:layout_marginTop="276dp"
         android:ems="10"
         android:inputType="textPersonName"
-        android:textColor="#474747"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.502"
         app:layout_constraintStart_toStartOf="parent"
@@ -101,7 +100,6 @@
         android:layout_marginTop="96dp"
         android:background="@color/gold_theme"
         android:text="Login"
-        android:textColor="@color/text_black"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"

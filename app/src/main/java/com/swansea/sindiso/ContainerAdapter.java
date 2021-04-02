@@ -7,32 +7,30 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
+import java.util.List;
+
 public class ContainerAdapter extends BaseAdapter {
 
     LayoutInflater mInflater;
-    private String[] containerNames;
-    private String[] containerDescriptions;
-    private String[] containerVolumes;
+    private List<Container> containers;
 
-    public ContainerAdapter(Context c, String[] containerNames, String[] containerDescriptions, String[] containerVolumes){
-        this.containerNames = containerNames;
-        this.containerDescriptions = containerDescriptions;
-        this.containerVolumes = containerVolumes;
+    public ContainerAdapter(Context c, List<Container> containers){
+        this.containers = containers;
         mInflater = (LayoutInflater) c.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
     @Override
     public int getCount() {
-        return containerVolumes.length;
+        return containers.size();
     }
 
     @Override
-    public Object getItem(int position) {
-        return containerNames[position];
+    public Container getItem(int position) {
+        return containers.get(position);
     }
 
     @Override
     public long getItemId(int position) {
-        return position;
+        return containers.get(position).getId();
     }
 
     @Override
@@ -43,11 +41,11 @@ public class ContainerAdapter extends BaseAdapter {
             TextView descriptionTextView = (TextView) convertView.findViewById(R.id.description_TextView);
             TextView volumeTextView = (TextView) convertView.findViewById(R.id.volume_TextView);
 
-            String name = containerNames[position];
-            String description = containerDescriptions[position];
-            String volume = containerVolumes[position];
+            String label = containers.get(position).getLabel();
+            String description = containers.get(position).getDescription();
+            String volume = containers.get(position).getVolume().toString();
 
-            nameTextView.setText(name);
+            nameTextView.setText(label);
             descriptionTextView.setText(description);
             volumeTextView.setText(volume);
         }

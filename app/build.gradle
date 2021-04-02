@@ -3,15 +3,16 @@ plugins {
 }
 
 android {
-    compileSdkVersion 30
+    compileSdkVersion 29
     buildToolsVersion "30.0.2"
 
     defaultConfig {
         applicationId "com.swansea.sindiso"
-        minSdkVersion 27
-        targetSdkVersion 30
+        minSdkVersion 29
+        targetSdkVersion 29
         versionCode 1
         versionName "1.0"
+        multiDexEnabled true
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
