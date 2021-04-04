@@ -12,7 +12,8 @@ import java.util.List;
 public class DataBaseHandler extends SQLiteOpenHelper {
 
     public static final String USER_TABLE = "USER_TABLE";
-    public static final String USER_TYPE_TABLE = "USER_TYPE_TABLE";
+    public static final String HOLDER_SPACE_TABLE = "HOLDER_SPACE_TABLE";
+    public static final String LOCATION_TABLE = "LOCATION_TABLE";
     public static final String COLUMN_USER_NAME = "USER_NAME";
     public static final String COLUMN_PASSWORD = "PASSWORD";
     public static final String COLUMN_STUDENT = "STUDENT";
@@ -21,6 +22,7 @@ public class DataBaseHandler extends SQLiteOpenHelper {
     private String query;
     private SQLiteDatabase db;
     private Cursor cursor;
+    private ContentValues cv;
     public static final String CONTAINER_TABLE = "CONTAINER_TABLE";
     public static final String COLUMN_CONTAINER_ID = "BOX_ID";
     public static final String COLUMN_LABEL = "LABEL";
@@ -28,6 +30,7 @@ public class DataBaseHandler extends SQLiteOpenHelper {
     public static final String COLUMN_LENGTH = "LENGTH";
     public static final String COLUMN_HEIGHT = "HEIGHT";
     public static final String COLUMN_WIDTH = "WIDTH";
+    public static final String COLUMN_LOCATION = "LOCATION";
 
     public DataBaseHandler(Context context) {
         super(context, "Users.db", null, 1);
@@ -50,6 +53,19 @@ public class DataBaseHandler extends SQLiteOpenHelper {
                 + COLUMN_WIDTH + " INTEGER, "
                 + COLUMN_DESCRIPTION + " TEXT)";
         db.execSQL(createTableStatement);
+
+        createTableStatement = "CREATE TABLE "
+                + HOLDER_SPACE_TABLE + " (" + COLUMN_ID + " INTEGER PRIMARY KEY, "
+                + COLUMN_LENGTH + " INTEGER, "
+                + COLUMN_HEIGHT + " INTEGER, "
+                + COLUMN_WIDTH + " INTEGER, "
+                + COLUMN_DESCRIPTION + " TEXT)";
+        db.execSQL(createTableStatement);
+
+        createTableStatement = "CREATE TABLE "
+                + LOCATION_TABLE + " (" + COLUMN_ID + " INTEGER PRIMARY KEY, "
+                + COLUMN_LOCATION + " TEXT)";
+        db.execSQL(createTableStatement);
     }
 
     @Override
@@ -59,7 +75,7 @@ public class DataBaseHandler extends SQLiteOpenHelper {
 
     public boolean addUser(User user){
         SQLiteDatabase db = this.getWritableDatabase();
-        ContentValues cv = new ContentValues();
+        cv = new ContentValues();
         cv.put(COLUMN_USER_NAME, user.getUserName());
         cv.put(COLUMN_PASSWORD, user.getPassword());
         cv.put(COLUMN_STUDENT, user.isStudent());
@@ -71,16 +87,21 @@ public class DataBaseHandler extends SQLiteOpenHelper {
         }
     }
 
-    public boolean addContainer(Container container){
+    public boolean addContainer(Container container, boolean existingContainer){
         SQLiteDatabase db = this.getWritableDatabase();
-        ContentValues cv = new ContentValues();
+        cv = new ContentValues();
         cv.put(COLUMN_ID, container.getOwnerId());
         cv.put(COLUMN_LABEL, container.getLabel());
         cv.put(COLUMN_LENGTH, container.getLength());
         cv.put(COLUMN_HEIGHT, container.getHeight());
         cv.put(COLUMN_WIDTH, container.getWidth());
         cv.put(COLUMN_DESCRIPTION, container.getDescription());
-        long insert = db.insert(CONTAINER_TABLE, null, cv);
+        long insert;
+        if (existingContainer) {
+            insert = db.update(CONTAINER_TABLE, cv, COLUMN_CONTAINER_ID + "=?", new String[]{container.getId().toString()});
+        } else {
+            insert = db.insert(CONTAINER_TABLE, null, cv);
+        }
         if(insert ==-1) {
             return false;
         } else {
@@ -118,6 +139,8 @@ public class DataBaseHandler extends SQLiteOpenHelper {
         db.close();
         return user;
     }
+
+
 
     public List<Container> getContainers(Integer owner) {
         Container container;

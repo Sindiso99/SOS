@@ -58,7 +58,7 @@ public class StudentContainers extends AppCompatActivity {
         leaveActivityBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent startIntent = new Intent(StudentContainers.this, LoginActivity.class);
+                Intent startIntent = new Intent(StudentContainers.this, HomePage.class);
                 startActivity(startIntent);
             }
         });

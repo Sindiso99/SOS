@@ -11,4 +11,5 @@
     <color name="text_black">#353535</color>
     <color name="grey_theme">#595959</color>
     <color name="gold_theme_variant">#916E04</color>
+    <color name="grey_background">#B8B8B8</color>
 </resources>

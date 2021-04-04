@@ -12,7 +12,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 public class ContainerEditor extends AppCompatActivity {
 
-    private int ownerId;
+    private Integer ownerId;
     private Button leaveActivityBtn;
     private Button saveContainerBtn;
     private Button deleteContainerBtn;
@@ -64,12 +64,16 @@ public class ContainerEditor extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 try {
-                    container = new Container(-1, labelInput.getText().toString(),
-                            Integer.parseInt(lengthInput.getText().toString()), Integer.parseInt(heightInput.getText().toString()),
-                            Integer.parseInt(widthInput.getText().toString()), descInput.getText().toString(), ownerId);
+                    if (existingContainer) {
+                        container = updatedContainer();
+                    } else {
+                        container = new Container(-1, labelInput.getText().toString(),
+                                Integer.parseInt(lengthInput.getText().toString()), Integer.parseInt(heightInput.getText().toString()),
+                                Integer.parseInt(widthInput.getText().toString()), descInput.getText().toString(), ownerId);
+                    }
                     Toast.makeText(ContainerEditor.this, container.toString(), Toast.LENGTH_SHORT).show();
                     DataBaseHandler dataBaseHandler = new DataBaseHandler(ContainerEditor.this);
-                    boolean complete = dataBaseHandler.addContainer(container);
+                    boolean complete = dataBaseHandler.addContainer(container, existingContainer);
                     if(complete) {
                         intent = new Intent(ContainerEditor.this, StudentContainers.class);
                         startActivity(intent);
@@ -98,5 +102,12 @@ public class ContainerEditor extends AppCompatActivity {
                     }
             }
         });
+    }
+
+    private Container updatedContainer(){
+        Container newContainer = new Container(container.getId(), labelInput.getText().toString(),
+                Integer.parseInt(lengthInput.getText().toString()), Integer.parseInt(heightInput.getText().toString()),
+                Integer.parseInt(widthInput.getText().toString()), descInput.getText().toString(), container.getOwnerId());
+        return newContainer;
     }
 }

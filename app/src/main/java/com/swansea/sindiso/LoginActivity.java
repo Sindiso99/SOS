@@ -16,14 +16,15 @@ import java.io.IOException;
 
 public class LoginActivity extends AppCompatActivity {
     private boolean loginComplete = false;
-    EditText userEditText;
-    EditText passwordEditText;
-    User user;
+    private EditText userEditText;
+    private EditText passwordEditText;
+    private User user;
+    private Intent startIntent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.login_activity);
+        setContentView(R.layout.activity_login);
 
         DataBaseHandler dataBaseHandler = new DataBaseHandler(LoginActivity.this);
 
@@ -46,11 +47,9 @@ public class LoginActivity extends AppCompatActivity {
                         e.printStackTrace();
                     }
                     if (loginComplete) {
-                        if(user.isStudent()){
-                        Intent startIntent = new Intent(LoginActivity.this, StudentContainers.class);
+                        startIntent = new Intent(LoginActivity.this, HomePage.class);
                         startIntent.putExtra("com.swansea.sindiso.takeUser", user);
                         startActivity(startIntent);
-                        }
                     }
                 } catch (Exception e) {
                     Toast.makeText(LoginActivity.this, R.string.missing_input, Toast.LENGTH_SHORT).show();

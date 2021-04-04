@@ -100,6 +100,7 @@
         android:layout_marginTop="96dp"
         android:background="@color/gold_theme"
         android:text="Login"
+        android:textColor="@color/text_black"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
@@ -112,6 +113,7 @@
         android:layout_marginTop="32dp"
         android:background="@color/gold_theme"
         android:text="Register Student"
+        android:textColor="@color/text_black"
         app:layout_constraintEnd_toStartOf="@+id/register_holder_button"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/login_button"></androidx.appcompat.widget.AppCompatButton>
@@ -122,6 +124,7 @@
         android:layout_height="40dp"
         android:background="@color/gold_theme"
         android:text="Register Holder"
+        android:textColor="@color/text_black"
         app:layout_constraintTop_toBottomOf="@+id/login_button"
         app:layout_constraintStart_toEndOf="@+id/register_student_button"
         app:layout_constraintEnd_toEndOf="parent"
