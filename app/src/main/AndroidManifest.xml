@@ -12,7 +12,7 @@
          location permissions for the "MyLocation" functionality.
     -->
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
 
     <application
         android:allowBackup="true"
@@ -21,7 +21,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.SOS">
-        <activity android:name=".HolderSpace"></activity>
+        <activity android:name=".SpaceEditor"></activity>
+        <activity android:name=".HolderSpace" />
         <activity android:name=".HomePage" />
         <activity android:name=".ContainerEditor" />
         <!--

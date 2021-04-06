@@ -15,13 +15,13 @@ import java.util.List;
 
 public class StudentContainers extends AppCompatActivity {
 
-    ListView containerListView;
-    String[] containerNames;
-    String[] containerDescriptions;
-    String[] containerVolumes;
-    Button addContainerBtn;
-    Intent editContainer;
-    User user;
+    private ListView containerListView;
+    private String[] containerNames;
+    private String[] containerDescriptions;
+    private String[] containerVolumes;
+    private Button addContainerBtn;
+    private Intent editContainer;
+    private User user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,8 +35,8 @@ public class StudentContainers extends AppCompatActivity {
         containerDescriptions = res.getStringArray(R.array.descriptions);
         containerVolumes = res.getStringArray(R.array.volumes);
 
-        if (getIntent().hasExtra("com.swansea.sindiso.takeUser")) {
-            user = getIntent().getParcelableExtra("com.swansea.sindiso.takeUser");
+        if (getIntent().hasExtra("com.swansea.sindiso.student")) {
+            user = getIntent().getParcelableExtra("com.swansea.sindiso.student");
             studentHeader.setText(user.getUserName());
         }
         DataBaseHandler dataBaseHandler = new DataBaseHandler(StudentContainers.this);

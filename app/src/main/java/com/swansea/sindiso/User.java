@@ -13,6 +13,7 @@ public class User implements Parcelable {
     private String password;
     private ArrayList<Container> containers;
     private boolean studentStatus;
+    private String email;
 
     public User(Integer id, String userName, String password, boolean studentStatus){
         this.id = id;
@@ -37,6 +38,12 @@ public class User implements Parcelable {
         this.password = password;
         containers = new ArrayList<Container>();
     }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getEmail(){ return email; }
 
     public Integer getId() {
         return id;

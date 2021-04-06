@@ -23,6 +23,7 @@ public class DataBaseHandler extends SQLiteOpenHelper {
     private SQLiteDatabase db;
     private Cursor cursor;
     private ContentValues cv;
+    private long insert;
     public static final String CONTAINER_TABLE = "CONTAINER_TABLE";
     public static final String COLUMN_CONTAINER_ID = "BOX_ID";
     public static final String COLUMN_LABEL = "LABEL";
@@ -74,7 +75,7 @@ public class DataBaseHandler extends SQLiteOpenHelper {
     }
 
     public boolean addUser(User user){
-        SQLiteDatabase db = this.getWritableDatabase();
+        db = this.getWritableDatabase();
         cv = new ContentValues();
         cv.put(COLUMN_USER_NAME, user.getUserName());
         cv.put(COLUMN_PASSWORD, user.getPassword());
@@ -88,7 +89,7 @@ public class DataBaseHandler extends SQLiteOpenHelper {
     }
 
     public boolean addContainer(Container container, boolean existingContainer){
-        SQLiteDatabase db = this.getWritableDatabase();
+        db = this.getWritableDatabase();
         cv = new ContentValues();
         cv.put(COLUMN_ID, container.getOwnerId());
         cv.put(COLUMN_LABEL, container.getLabel());
@@ -96,7 +97,6 @@ public class DataBaseHandler extends SQLiteOpenHelper {
         cv.put(COLUMN_HEIGHT, container.getHeight());
         cv.put(COLUMN_WIDTH, container.getWidth());
         cv.put(COLUMN_DESCRIPTION, container.getDescription());
-        long insert;
         if (existingContainer) {
             insert = db.update(CONTAINER_TABLE, cv, COLUMN_CONTAINER_ID + "=?", new String[]{container.getId().toString()});
         } else {
@@ -109,13 +109,38 @@ public class DataBaseHandler extends SQLiteOpenHelper {
         }
     }
 
+    public boolean addHolderSpace(Space space, boolean existingSpace){
+        db = this.getWritableDatabase();
+        cv = new ContentValues();
+        cv.put(COLUMN_ID, space.getOwnerId());
+        cv.put(COLUMN_LENGTH, space.getLength());
+        cv.put(COLUMN_HEIGHT, space.getHeight());
+        cv.put(COLUMN_WIDTH, space.getWidth());
+        cv.put(COLUMN_DESCRIPTION, space.getDescription());
+        if (existingSpace) {
+            insert = db.update(HOLDER_SPACE_TABLE, cv, COLUMN_ID + "=?", new String[]{space.getOwnerId().toString()});
+        } else {
+            insert = db.insert(HOLDER_SPACE_TABLE, null, cv);
+        }
+        if(insert ==-1) {
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+
     public boolean deleteContainer(Integer boxId){
         db = this.getWritableDatabase();
         query = "DELETE FROM " + CONTAINER_TABLE + " WHERE " + COLUMN_CONTAINER_ID + " = '" + boxId + "'";
         cursor = db.rawQuery(query, null);
         if(!cursor.moveToFirst()) {
+            cursor.close();
+            db.close();
             return  true;
         } else {
+            cursor.close();
+            db.close();
             return false;
         }
     }
@@ -138,6 +163,27 @@ public class DataBaseHandler extends SQLiteOpenHelper {
         cursor.close();
         db.close();
         return user;
+    }
+
+    public Space getHolderSpace(Integer owner) {
+        Space space;
+        query = "SELECT * FROM " + HOLDER_SPACE_TABLE + " WHERE " + COLUMN_ID + " = " + owner;
+        db = this.getReadableDatabase();
+        cursor = db.rawQuery(query, null);
+        if(cursor.moveToFirst()) {
+            Integer ownerId = cursor.getInt(0);
+            Integer length = cursor.getInt(1);
+            Integer height = cursor.getInt(2);
+            Integer width = cursor.getInt(3);
+            String description = cursor.getString(4);
+            space = new Space(ownerId, length, height, width, description);
+        } else {
+            //no Space case
+            space = new Space(-1, 0, 0, 0, "Provide a Description for your Space");
+        }
+        cursor.close();
+        db.close();
+        return space;
     }
 
 
@@ -165,6 +211,8 @@ public class DataBaseHandler extends SQLiteOpenHelper {
             container = new Container(0 , "no Containers", 0,0, 0, "no description", 0);
             containers.add(container);
         }
+        cursor.close();
+        db.close();
         return containers;
     }
 

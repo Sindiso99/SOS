@@ -43,9 +43,10 @@ public class HomePage extends AppCompatActivity {
             public void onClick(View v) {
                 if(!user.isStudent()){
                     startIntent = new Intent (HomePage.this, HolderSpace.class);
+                    startIntent.putExtra("com.swansea.sindiso.owner", user);
                 } else {
                 startIntent = new Intent(HomePage.this, StudentContainers.class);
-                startIntent.putExtra("com.swansea.sindiso.takeUser", user);
+                startIntent.putExtra("com.swansea.sindiso.student", user);
                 }
                 startActivity(startIntent);
             }
