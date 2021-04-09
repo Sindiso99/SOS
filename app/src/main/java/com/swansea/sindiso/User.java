@@ -1,15 +1,17 @@
 package com.swansea.sindiso;
 
-import android.location.Location;
 import android.os.Parcel;
 import android.os.Parcelable;
+
+import com.google.android.gms.maps.model.LatLng;
 
 import java.util.ArrayList;
 
 public class User implements Parcelable {
     private Integer id;
     private String userName;
-    private Location address;
+    private LatLng location;
+    private String fullAddress;
     private String password;
     private ArrayList<Container> containers;
     private boolean studentStatus;
@@ -37,6 +39,27 @@ public class User implements Parcelable {
         this.userName = userName;
         this.password = password;
         containers = new ArrayList<Container>();
+    }
+
+    public LatLng getLocation() {
+        return location;
+    }
+
+    public String getFullAddress() {
+        return fullAddress;
+    }
+
+    public void setLocation(LatLng location) {
+        this.location = location;
+    }
+
+    public void setLocation(double latitude, double longitude) {
+        LatLng latLng = new LatLng(latitude, longitude);
+        this.location = latLng;
+    }
+
+    public void setFullAddress(String fullAddress) {
+        this.fullAddress = fullAddress;
     }
 
     public void setEmail(String email) {

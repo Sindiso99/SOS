@@ -14,6 +14,7 @@ public class HomePage extends AppCompatActivity {
     private Button help;
     private Button myContainersBtn;
     private Button qrCodeBtn;
+    private Button editLocation;
     private User user;
     private Intent startIntent;
 
@@ -57,6 +58,16 @@ public class HomePage extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent startIntent = new Intent(HomePage.this, LoginActivity.class);
+                startActivity(startIntent);
+            }
+        });
+
+        editLocation = (Button) findViewById(R.id.manage_details);
+        editLocation.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startIntent = new Intent(HomePage.this, MapsActivity.class);
+                startIntent.putExtra("com.swansea.sindiso.user", user);
                 startActivity(startIntent);
             }
         });

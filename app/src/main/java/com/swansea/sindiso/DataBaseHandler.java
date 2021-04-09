@@ -13,7 +13,7 @@ public class DataBaseHandler extends SQLiteOpenHelper {
 
     public static final String USER_TABLE = "USER_TABLE";
     public static final String HOLDER_SPACE_TABLE = "HOLDER_SPACE_TABLE";
-    public static final String LOCATION_TABLE = "LOCATION_TABLE";
+    public static final String ADDRESS_TABLE = "ADDRESS_TABLE";
     public static final String COLUMN_USER_NAME = "USER_NAME";
     public static final String COLUMN_PASSWORD = "PASSWORD";
     public static final String COLUMN_STUDENT = "STUDENT";
@@ -31,7 +31,10 @@ public class DataBaseHandler extends SQLiteOpenHelper {
     public static final String COLUMN_LENGTH = "LENGTH";
     public static final String COLUMN_HEIGHT = "HEIGHT";
     public static final String COLUMN_WIDTH = "WIDTH";
-    public static final String COLUMN_LOCATION = "LOCATION";
+    public static final String COLUMN_ADDRESS = "ADDRESS";
+    public static final String COLUMN_LONGITUDE = "LONGITUDE";
+    public static final String COLUMN_LATITUDE = "LATITUDE";
+    public static final String COLUMN_EMAIL = "EMAIL";
 
     public DataBaseHandler(Context context) {
         super(context, "Users.db", null, 1);
@@ -45,6 +48,7 @@ public class DataBaseHandler extends SQLiteOpenHelper {
                 + COLUMN_PASSWORD + " TEXT, "
                 + COLUMN_STUDENT + " BOOL)";
         db.execSQL(createTableStatement);
+
         createTableStatement = "CREATE TABLE "
                 + CONTAINER_TABLE + " (" + COLUMN_CONTAINER_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
                 + COLUMN_ID + " INTEGER, "
@@ -64,8 +68,11 @@ public class DataBaseHandler extends SQLiteOpenHelper {
         db.execSQL(createTableStatement);
 
         createTableStatement = "CREATE TABLE "
-                + LOCATION_TABLE + " (" + COLUMN_ID + " INTEGER PRIMARY KEY, "
-                + COLUMN_LOCATION + " TEXT)";
+                + ADDRESS_TABLE + " (" + COLUMN_ID + " INTEGER PRIMARY KEY, "
+                + COLUMN_ADDRESS + " TEXT, "
+                + COLUMN_LATITUDE + " REAL, "
+                + COLUMN_LONGITUDE + " REAL, "
+                + COLUMN_EMAIL + " TEXT)";
         db.execSQL(createTableStatement);
     }
 
@@ -129,6 +136,25 @@ public class DataBaseHandler extends SQLiteOpenHelper {
         }
     }
 
+    public boolean addAddress(User user, boolean existingAddress){
+        db = this.getWritableDatabase();
+        cv = new ContentValues();
+        cv.put(COLUMN_ID, user.getId());
+        cv.put(COLUMN_ADDRESS, user.getFullAddress());
+        cv.put(COLUMN_LATITUDE, user.getLocation().latitude);
+        cv.put(COLUMN_LONGITUDE, user.getLocation().longitude);
+        cv.put(COLUMN_EMAIL, user.getEmail());
+        if (existingAddress) {
+            insert = db.update(ADDRESS_TABLE, cv, COLUMN_ID + "=?", new String[]{user.getId().toString()});
+        } else {
+            insert = db.insert(ADDRESS_TABLE, null, cv);
+        }
+        if(insert ==-1) {
+            return false;
+        } else {
+            return true;
+        }
+    }
 
     public boolean deleteContainer(Integer boxId){
         db = this.getWritableDatabase();
@@ -186,8 +212,21 @@ public class DataBaseHandler extends SQLiteOpenHelper {
         return space;
     }
 
-
-
+    public User getAddressData(User user) {
+        query = "SELECT * FROM " + ADDRESS_TABLE + " WHERE " + COLUMN_ID + " = " + user.getId();
+        db = this.getReadableDatabase();
+        cursor = db.rawQuery(query, null);
+        if(cursor.moveToFirst()) {
+            user.setFullAddress(cursor.getString(1));
+            double latitude = cursor.getDouble(2);
+            double longitude = cursor.getDouble(3);
+            user.setEmail(cursor.getString(4));
+            user.setLocation(latitude, longitude);
+        }
+        cursor.close();
+        db.close();
+        return user;
+    }
     public List<Container> getContainers(Integer owner) {
         Container container;
         List<Container> containers = new ArrayList<>();

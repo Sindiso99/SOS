@@ -12,7 +12,6 @@
          location permissions for the "MyLocation" functionality.
     -->
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
 
     <application
         android:allowBackup="true"
@@ -25,18 +24,7 @@
         <activity android:name=".HolderSpace" />
         <activity android:name=".HomePage" />
         <activity android:name=".ContainerEditor" />
-        <!--
-<uses-library
-            android:name="com.google.android.wearable"
-            android:required="true" />
 
-               Set to true if your app is Standalone, that is, it does not require the handheld
-               app to run.
-
-        <meta-data
-            android:name="com.google.android.wearable.standalone"
-            android:value="true" />
-        -->
         <activity
             android:name=".StudentContainers"
             android:label="@string/title_activity_container_"
