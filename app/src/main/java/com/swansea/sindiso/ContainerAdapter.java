@@ -47,7 +47,7 @@ public class ContainerAdapter extends BaseAdapter {
 
             nameTextView.setText(label);
             descriptionTextView.setText(description);
-            volumeTextView.setText(volume);
+            volumeTextView.setText(volume + "cm\u00B3");
         }
 
 

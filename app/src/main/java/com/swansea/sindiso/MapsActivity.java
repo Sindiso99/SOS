@@ -97,6 +97,7 @@ public class MapsActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 intent = new Intent(MapsActivity.this, HomePage.class);
+                intent.putExtra("com.swansea.sindiso.takeUser", user);
                 startActivity(intent);
             }
         });

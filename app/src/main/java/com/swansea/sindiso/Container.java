@@ -12,6 +12,7 @@ public class Container implements Parcelable {
     private Integer height;
     private Integer volume;
     private Integer ownerId;
+    private final Integer CELL_SIZE = 50;
 
     public Container(Integer id, String label, Integer l, Integer h, Integer w, String description, Integer ownerId){
         this.id = id;
@@ -59,6 +60,22 @@ public class Container implements Parcelable {
 
     public void setVolume(){
         volume = length * width * height;
+    }
+
+    public int lengthToCell() {
+        if (length < CELL_SIZE) {
+            return 1;
+        } else {
+            return ((int) Math.ceil((double)length / CELL_SIZE));
+        }
+    }
+
+    public int widthToCell() {
+        if (width < CELL_SIZE) {
+            return 1;
+        } else {
+            return ((int) Math.ceil((double)width / CELL_SIZE));
+        }
     }
 
     public void setLabel(String label) {

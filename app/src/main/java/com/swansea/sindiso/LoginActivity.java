@@ -64,8 +64,8 @@ public class LoginActivity extends AppCompatActivity {
                 try {
                     String userName = userEditText.getText().toString();
                     String passWord = passwordEditText.getText().toString();
-                    user = new User(-1, userName, passWord, true);
-                    boolean complete = dataBaseHandler.addUser(user);
+                    user = new User(-1, userName, passWord, true, false);
+                    boolean complete = dataBaseHandler.addUser(user, false);
                     if (complete){
                         loginOutput.setText("Registered Successfully");
                     } else {
@@ -73,7 +73,6 @@ public class LoginActivity extends AppCompatActivity {
                     }
                 } catch (Exception e) {
                     Toast.makeText(LoginActivity.this, R.string.missing_input, Toast.LENGTH_SHORT).show();
-                    user = new User(-1, "error", "error", false);
                 }
             }
         });
@@ -85,9 +84,9 @@ public class LoginActivity extends AppCompatActivity {
                 try {
                     String userName = userEditText.getText().toString();
                     String passWord = passwordEditText.getText().toString();
-                    user = new User(-1, userName, passWord, false);
+                    user = new User(-1, userName, passWord, false, false);
                     DataBaseHandler dataBaseHandler = new DataBaseHandler(LoginActivity.this);
-                    boolean complete = dataBaseHandler.addUser(user);
+                    boolean complete = dataBaseHandler.addUser(user, false);
                     if (complete){
                         loginOutput.setText("Registered Successfully");
                     } else {
@@ -95,7 +94,6 @@ public class LoginActivity extends AppCompatActivity {
                     }
                 } catch (Exception e) {
                     Toast.makeText(LoginActivity.this, R.string.missing_input, Toast.LENGTH_SHORT).show();
-                    user = new User(-1, "error", "error", false);
                 }
             }
         });

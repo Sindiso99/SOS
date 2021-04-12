@@ -11,8 +11,6 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import java.util.List;
-
 public class StudentContainers extends AppCompatActivity {
 
     private ListView containerListView;
@@ -40,8 +38,9 @@ public class StudentContainers extends AppCompatActivity {
             studentHeader.setText(user.getUserName());
         }
         DataBaseHandler dataBaseHandler = new DataBaseHandler(StudentContainers.this);
-        List<Container> containers = dataBaseHandler.getContainers(user.getId());
-        ContainerAdapter containerAdapter = new ContainerAdapter(this, containers);
+
+        user.setContainers(dataBaseHandler.getContainers(user.getId()));
+        ContainerAdapter containerAdapter = new ContainerAdapter(this, user.getContainers());
         containerListView.setAdapter(containerAdapter);
         containerListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -59,6 +58,7 @@ public class StudentContainers extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent startIntent = new Intent(StudentContainers.this, HomePage.class);
+                startIntent.putExtra("com.swansea.sindiso.takeUser", user);
                 startActivity(startIntent);
             }
         });

@@ -45,6 +45,7 @@ public class HolderSpace extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 intent = new Intent(HolderSpace.this, HomePage.class);
+                intent.putExtra("com.swansea.sindiso.takeUser", user);
                 startActivity(intent);
             }
         });

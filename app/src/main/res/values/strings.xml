@@ -42,4 +42,11 @@
     <string name="cannot_delete">No Item to Delete Here</string>
     <string name="delete_complete">Box Deleted Successfully</string>
     <string name="delete_failed">Failed to Delete Box</string>
+    <string name="not_ready">Please Complete the First 2 Actions</string>
+    <string name="ready">Waiting For Your Best Match</string>
+    <string name="match_found">You Have a New Match</string>
+    <string name="yes_option">Yes, match me</string>
+    <string name="no_option">No, not yet</string>
+    <string name="ask_to_match">Would you like to start matching? Please note that you will not be able to alter your boxes hereafter</string>
+    <string name="match_dialog_title">Are You Ready</string>
 </resources>
