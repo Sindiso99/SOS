@@ -223,6 +223,27 @@ public class DataBaseHandler extends SQLiteOpenHelper {
         return user;
     }
 
+    public User getUserDetails(Integer userId){
+        User user;
+        query = "SELECT * FROM " + USER_TABLE + " WHERE " + COLUMN_ID + " = " + userId;
+        db = this.getReadableDatabase();
+        cursor = db.rawQuery(query, null);
+        if (cursor.moveToFirst()) {
+            int id = cursor.getInt(0);
+            String userName = cursor.getString(1);
+            String password = cursor.getString(2);
+            Boolean status = cursor.getInt(3) == 1;
+            Boolean ready = cursor.getInt(4) == 1;
+            user = new User(id, userName, password, status, ready);
+        } else {
+            //failure case
+            user = new User(-1, "error", "error", false, false);
+        }
+        cursor.close();
+        db.close();
+        return user;
+    }
+
     public boolean matchAlreadyFound(Integer userId) {
         query = "SELECT * FROM " + MATCH_TABLE + " WHERE " + COLUMN_STUDENT_ID + " = " + userId + " OR " + COLUMN_HOLDER_ID + " = " + userId;
         db = this.getReadableDatabase();
@@ -321,7 +342,7 @@ public class DataBaseHandler extends SQLiteOpenHelper {
         db.close();
         return user;
     }
-    public List<Container> getContainers(Integer owner) {
+    public List<Container> getAllContainers(Integer owner) {
         Container container;
         List<Container> containers = new ArrayList<>();
         query = "SELECT * FROM " + CONTAINER_TABLE + " WHERE " + COLUMN_ID + " = " + owner + " ORDER BY " + COLUMN_VOLUME + " DESC";
@@ -349,8 +370,27 @@ public class DataBaseHandler extends SQLiteOpenHelper {
         return containers;
     }
 
-//    public Container getContainerDetails(Integer id) {
-//
-//    }
+    public Container getContainerDetails(Integer id) {
+        Container container;
+        query = "SELECT * FROM " + CONTAINER_TABLE + " WHERE " + COLUMN_CONTAINER_ID + " = " + id;
+        db = this.getReadableDatabase();
+        cursor = db.rawQuery(query, null);
+        if (cursor.moveToFirst()) {
+                Integer containerId = cursor.getInt(0);
+                Integer ownerId = cursor.getInt(1);
+                String label = cursor.getString(2);
+                Integer length = cursor.getInt(3);
+                Integer height = cursor.getInt(4);
+                Integer width = cursor.getInt(5);
+                String description = cursor.getString(6);
+                container = new Container(containerId, label, length, height, width, description, ownerId);
+        } else {
+            //in the event of failure to select, empty values used
+            container = new Container(0 , "Container Not Found", 0,0, 0, "No Description", 0);
+        }
+        cursor.close();
+        db.close();
+        return container;
+    }
 
 }

@@ -13,6 +13,10 @@
     -->
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 
+    <uses-feature android:name="android.hardware.camera.any" />
+
+    <uses-permission android:name="android.permission.CAMERA" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -20,15 +24,14 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.SOS">
-        <activity android:name=".SpaceEditor"></activity>
+        <activity android:name=".ScanLabel"></activity>
+        <activity android:name=".ContainerQrCode" />
+        <activity android:name=".StudentLabels" />
+        <activity android:name=".SpaceEditor" />
         <activity android:name=".HolderSpace" />
         <activity android:name=".HomePage" />
         <activity android:name=".ContainerEditor" />
-
-        <activity
-            android:name=".StudentContainers"
-            android:label="@string/title_activity_container_"
-            android:theme="@style/Theme.SOS.NoActionBar" />
+        <activity android:name=".StudentContainers" />
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
              (See the file "res/values/google_maps_api.xml").
@@ -41,9 +44,7 @@
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key" />
 
-        <activity
-            android:name=".MapsActivity"
-            android:label="@string/title_activity_maps" />
+        <activity android:name=".MapsActivity" />
         <activity android:name=".LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

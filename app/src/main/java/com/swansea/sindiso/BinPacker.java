@@ -27,7 +27,7 @@ public class BinPacker {
         this.context = context;
         this.houses = houses;
         dataBaseHandler = new DataBaseHandler(this.context);
-        this.student.setContainers(dataBaseHandler.getContainers(this.student.getId()));
+        this.student.setContainers(dataBaseHandler.getAllContainers(this.student.getId()));
         allContainers = this.student.getContainers();
         unplacedContainers = allContainers;
         placedContainers = new ArrayList<>();

@@ -8,8 +8,8 @@
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
-        android:layout_marginStart="20dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginStart="98dp"
+        android:layout_marginTop="14dp"
         android:text="ContainerName"
         android:textSize="24sp" />
 
@@ -21,16 +21,15 @@
         android:layout_alignLeft="@id/containerName_TextView"
         android:layout_marginTop="10dp"
         android:text="ContainerDescription"
-        android:textSize="16sp" />
+        android:textSize="16sp"
+        android:paddingBottom="15dp"/>
 
-    <TextView
-        android:id="@+id/volume_TextView"
+    <ImageView
+        android:id="@+id/box_icon"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBaseline="@id/containerName_TextView"
-        android:layout_alignParentEnd="true"
-        android:layout_marginEnd="43dp"
-        android:text="Volume"
-        android:textSize="16sp" />
-
+        android:src="@drawable/box_icon"
+        android:layout_alignTop="@+id/containerName_TextView"
+        android:translationY="10dp"
+        android:layout_marginStart="30dp"></ImageView>
 </RelativeLayout>

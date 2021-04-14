@@ -56,6 +56,7 @@ public class ContainerEditor extends AppCompatActivity {
             public void onClick(View v) {
                 intent = new Intent(ContainerEditor.this, StudentContainers.class);
                 startActivity(intent);
+                overridePendingTransition( R.anim.swipe_out_left, R.anim.swipe_in_right);
             }
         });
 
@@ -77,6 +78,7 @@ public class ContainerEditor extends AppCompatActivity {
                     if(complete) {
                         intent = new Intent(ContainerEditor.this, StudentContainers.class);
                         startActivity(intent);
+                        overridePendingTransition( R.anim.swipe_out_left, R.anim.swipe_in_right);
                     }
                 } catch (Exception e) {
                     Toast.makeText(ContainerEditor.this, R.string.missing_input, Toast.LENGTH_SHORT).show();
@@ -94,6 +96,7 @@ public class ContainerEditor extends AppCompatActivity {
                             Toast.makeText(ContainerEditor.this, R.string.delete_complete, Toast.LENGTH_SHORT).show();
                             intent = new Intent(ContainerEditor.this, StudentContainers.class);
                             startActivity(intent);
+                            overridePendingTransition( R.anim.swipe_out_left, R.anim.swipe_in_right);
                         } else {
                             Toast.makeText(ContainerEditor.this, R.string.delete_failed, Toast.LENGTH_SHORT).show();
                         }

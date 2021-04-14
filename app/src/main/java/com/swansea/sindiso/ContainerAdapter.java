@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class ContainerAdapter extends BaseAdapter {
@@ -18,6 +19,13 @@ public class ContainerAdapter extends BaseAdapter {
         this.containers = containers;
         mInflater = (LayoutInflater) c.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
+
+    public ContainerAdapter(Context c, Container container){
+        containers = new ArrayList<>();
+        containers.add(container);
+        mInflater = (LayoutInflater) c.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+    }
+
     @Override
     public int getCount() {
         return containers.size();
@@ -39,15 +47,12 @@ public class ContainerAdapter extends BaseAdapter {
             convertView = mInflater.inflate(R.layout.container_detail, parent, false);
             TextView nameTextView = (TextView) convertView.findViewById(R.id.containerName_TextView);
             TextView descriptionTextView = (TextView) convertView.findViewById(R.id.description_TextView);
-            TextView volumeTextView = (TextView) convertView.findViewById(R.id.volume_TextView);
 
             String label = containers.get(position).getLabel();
             String description = containers.get(position).getDescription();
-            String volume = containers.get(position).getVolume().toString();
 
             nameTextView.setText(label);
             descriptionTextView.setText(description);
-            volumeTextView.setText(volume + "cm\u00B3");
         }
 
 

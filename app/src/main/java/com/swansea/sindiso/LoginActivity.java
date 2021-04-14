@@ -50,6 +50,7 @@ public class LoginActivity extends AppCompatActivity {
                         startIntent = new Intent(LoginActivity.this, HomePage.class);
                         startIntent.putExtra("com.swansea.sindiso.takeUser", user);
                         startActivity(startIntent);
+                        overridePendingTransition(R.anim.slide_out_bottom, R.anim.slide_in_bottom);
                     }
                 } catch (Exception e) {
                     Toast.makeText(LoginActivity.this, R.string.missing_input, Toast.LENGTH_SHORT).show();

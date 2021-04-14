@@ -1,7 +1,6 @@
 package com.swansea.sindiso;
 
 import android.content.Intent;
-import android.content.res.Resources;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
@@ -14,9 +13,6 @@ import androidx.appcompat.app.AppCompatActivity;
 public class StudentContainers extends AppCompatActivity {
 
     private ListView containerListView;
-    private String[] containerNames;
-    private String[] containerDescriptions;
-    private String[] containerVolumes;
     private Button addContainerBtn;
     private Intent editContainer;
     private User user;
@@ -26,12 +22,7 @@ public class StudentContainers extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_student_containers);
         TextView studentHeader = (TextView) findViewById(R.id.student_header);
-
-        Resources res = getResources();
         containerListView = (ListView) findViewById(R.id.container_list);
-        containerNames = res.getStringArray(R.array.containers);
-        containerDescriptions = res.getStringArray(R.array.descriptions);
-        containerVolumes = res.getStringArray(R.array.volumes);
 
         if (getIntent().hasExtra("com.swansea.sindiso.student")) {
             user = getIntent().getParcelableExtra("com.swansea.sindiso.student");
@@ -39,7 +30,7 @@ public class StudentContainers extends AppCompatActivity {
         }
         DataBaseHandler dataBaseHandler = new DataBaseHandler(StudentContainers.this);
 
-        user.setContainers(dataBaseHandler.getContainers(user.getId()));
+        user.setContainers(dataBaseHandler.getAllContainers(user.getId()));
         ContainerAdapter containerAdapter = new ContainerAdapter(this, user.getContainers());
         containerListView.setAdapter(containerAdapter);
         containerListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -48,10 +39,9 @@ public class StudentContainers extends AppCompatActivity {
                 editContainer = new Intent(StudentContainers.this, ContainerEditor.class);
                 editContainer.putExtra("com.swansea.sindiso.containerToEdit", containerAdapter.getItem(position));
                 startActivity(editContainer);
+                overridePendingTransition(R.anim.swipe_in_right, R.anim.swipe_out_left);
             }
         });
-
-
 
         Button leaveActivityBtn = (Button) findViewById(R.id.leave_activity);
         leaveActivityBtn.setOnClickListener(new View.OnClickListener() {
@@ -60,6 +50,7 @@ public class StudentContainers extends AppCompatActivity {
                 Intent startIntent = new Intent(StudentContainers.this, HomePage.class);
                 startIntent.putExtra("com.swansea.sindiso.takeUser", user);
                 startActivity(startIntent);
+                overridePendingTransition(R.anim.slide_out_bottom, R.anim.slide_in_bottom);
             }
         });
 
