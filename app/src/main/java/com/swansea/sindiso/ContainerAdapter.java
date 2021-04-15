@@ -43,8 +43,10 @@ public class ContainerAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        if (convertView == null){
+        if (convertView == null) {
             convertView = mInflater.inflate(R.layout.container_detail, parent, false);
+        }
+
             TextView nameTextView = (TextView) convertView.findViewById(R.id.containerName_TextView);
             TextView descriptionTextView = (TextView) convertView.findViewById(R.id.description_TextView);
 
@@ -53,8 +55,6 @@ public class ContainerAdapter extends BaseAdapter {
 
             nameTextView.setText(label);
             descriptionTextView.setText(description);
-        }
-
 
         return convertView;
     }

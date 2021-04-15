@@ -55,6 +55,9 @@ public class BinPacker {
                 tempSpace.initialiseGrid();
             }
             if (checkIfFits(tempSpace)){
+                //initialise placed and unplaced containers
+                placedContainers = new ArrayList<>();
+                unplacedContainers = allContainers;
                 for (Container curContainer : allContainers) {
                     int lengthToFit = curContainer.lengthToCell();
                     int widthToFit = curContainer.widthToCell();

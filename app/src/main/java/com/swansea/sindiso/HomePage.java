@@ -69,12 +69,8 @@ public class HomePage extends AppCompatActivity {
             public void onClick(View v) {
                 if (user.isReady()) {
                     if (manageCameraPermission()) {
-                        if (user.isStudent()) {
                             startIntent = new Intent(HomePage.this, StudentLabels.class);
-                            startIntent.putExtra("com.swansea.sindiso.student", user);
-                        } else {
-
-                        }
+                            startIntent.putExtra("com.swansea.sindiso.user", user);
                         startActivity(startIntent);
                     }
                 } else {
@@ -92,6 +88,12 @@ public class HomePage extends AppCompatActivity {
                     if (matchMe && !user.isReady()) {
                         askIfReady();
                     }
+                }
+                if (dataBaseHandler.matchAlreadyFound(user.getId())) {
+                    startIntent = new Intent(HomePage.this, MyMatches.class);
+                    startIntent.putExtra("com.swansea.sindiso.user", user);
+                    startActivity(startIntent);
+                    overridePendingTransition(R.anim.slide_out_bottom, R.anim.slide_in_bottom);
                 }
             }
         });
@@ -114,7 +116,6 @@ public class HomePage extends AppCompatActivity {
                 }
             }
         });
-
 
         logout.setOnClickListener(new View.OnClickListener() {
             @Override

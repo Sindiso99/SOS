@@ -255,6 +255,30 @@ public class DataBaseHandler extends SQLiteOpenHelper {
         }
     }
 
+    public List<Integer> getMatches(User user){
+        List<Integer> matchId = new ArrayList<>();
+        if (!user.isStudent()){
+            query = "SELECT * FROM " + MATCH_TABLE + " WHERE " + COLUMN_HOLDER_ID + " = " + user.getId();
+            db = this.getReadableDatabase();
+            cursor = db.rawQuery(query, null);
+            if (cursor.moveToFirst()) {
+                do {
+                    matchId.add(cursor.getInt(0));
+                } while (cursor.moveToNext());
+            }
+        } else {
+            query = "SELECT * FROM " + MATCH_TABLE + " WHERE " + COLUMN_STUDENT_ID + " = " + user.getId();
+            db = this.getReadableDatabase();
+            cursor = db.rawQuery(query, null);
+            if (cursor.moveToFirst()) {
+                matchId.add(cursor.getInt(1));
+            }
+        }
+        cursor.close();
+        db.close();
+        return matchId;
+    }
+
     public Space getHolderSpace(Integer owner) {
         Space space;
         query = "SELECT * FROM " + HOLDER_SPACE_TABLE + " WHERE " + COLUMN_ID + " = " + owner;
