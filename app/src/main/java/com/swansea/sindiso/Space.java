@@ -12,9 +12,11 @@ public class Space {
     private Integer volume;
     private List<Container> containers;
     private Integer[][] floorLayout;
+    private Integer[][][] spaceLayout;
     private Integer availableCells;
     private Integer gridWidth;
     private Integer gridLength;
+    private Integer gridHeight;
 
     public Space(Integer ownerId, Integer length, Integer height, Integer width, String description) {
         this.length = length;
@@ -26,6 +28,7 @@ public class Space {
         containers = new ArrayList<>();
         gridLength = length * 2;
         gridWidth = width * 2;
+        gridHeight = height * 2;
     }
 
     private void setVolume(){
@@ -56,16 +59,32 @@ public class Space {
         return ownerId;
     }
 
-    public void initialiseGrid() {
-        floorLayout = new Integer[gridLength][gridWidth];
-        setGridToEmpty();
-        availableCells = gridLength * gridWidth;
+    public void initialiseSpace() {
+        spaceLayout = new Integer[gridLength][gridWidth][gridHeight];
+        setSpaceToEmpty();
+        availableCells = gridLength * gridWidth * gridHeight;
     }
 
-    private void setGridToEmpty(){
+    private void setSpaceToEmpty(){
         for (int x = 0; x < gridLength; x++){
             for(int y = 0; y < gridWidth; y++){
-                floorLayout[x][y] = -1;
+                for(int z = 0; z < gridHeight; z++){
+                    spaceLayout[x][y][z] = -1;
+                }
+            }
+        }
+    }
+
+    public void importSpace(Integer[][][] space){
+        spaceLayout = space;
+        availableCells = 0;
+        for (int x = 0; x < gridLength; x++){
+            for(int y = 0; y < gridWidth; y++){
+                for(int z = 0; z < gridHeight; z++){
+                    if (spaceLayout[x][y][z] == -1) {
+                        availableCells ++;
+                    }
+                }
             }
         }
     }
@@ -91,25 +110,24 @@ public class Space {
         return gridLength;
     }
 
+    public Integer getGridHeight() { return gridHeight; }
+
     public Integer[][] getFloorLayout() {
         return floorLayout;
     }
 
+    public Integer[][][] getSpaceLayout() { return spaceLayout; }
+
     public Integer getAvailableCells() {
         return availableCells;
-    }
-
-    public void addContainer(Container container){
-        containers.add(container);
     }
 
     public Integer getFloorCell(int x , int y){
         return floorLayout[x][y];
     }
 
-    public List<Container> getAllContainers() {
-        return containers;
-    }
+    public Integer getSpaceCell(int x, int y, int z) { return spaceLayout[x][y][z]; }
+
 
     public void fitContainer(Integer id, int lengthToFit, int widthToFit, int startX, int startY){
         for (int x = startX; x - startX < lengthToFit; x++){
@@ -119,4 +137,16 @@ public class Space {
             }
         }
     }
+
+    public void fitContainer(Integer id, int lengthToFit, int widthToFit, int heightToFit, int startX, int startY, int startZ){
+        for (int x = startX; x - startX < lengthToFit; x++) {
+            for (int y = startY; y - startY < widthToFit; y++) {
+                for (int z = startZ; z - startZ < heightToFit; z++) {
+                    spaceLayout[x][y][z] = id;
+                    availableCells--;
+                }
+            }
+        }
+    }
+
 }

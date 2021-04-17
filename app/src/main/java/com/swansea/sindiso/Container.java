@@ -78,6 +78,14 @@ public class Container implements Parcelable {
         }
     }
 
+    public int heightToCell() {
+        if (height < CELL_SIZE) {
+            return 1;
+        } else {
+            return ((int) Math.ceil((double)height / CELL_SIZE));
+        }
+    }
+
     public void setLabel(String label) {
         this.label = label;
     }
