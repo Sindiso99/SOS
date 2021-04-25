@@ -44,8 +44,11 @@ public class HomePage extends AppCompatActivity {
         notificationHeader = (TextView) findViewById(R.id.notification_textView);
         editLocation = (Button) findViewById(R.id.manage_details);
 
-        if (getIntent().hasExtra("com.swansea.sindiso.takeUser")) {
-            user = getIntent().getParcelableExtra("com.swansea.sindiso.takeUser");
+        if (getIntent().hasExtra("com.swansea.sindiso.login")) {
+            user = getIntent().getParcelableExtra("com.swansea.sindiso.login");
+        } else if (getIntent().hasExtra("com.swansea.sindiso.newUser")){
+            user = getIntent().getParcelableExtra("com.swansea.sindiso.login");
+
         }
 
         if (!user.isStudent()) {
@@ -55,7 +58,7 @@ public class HomePage extends AppCompatActivity {
             myContainersBtn.setText("My Space");
             qrCodeBtn.setText("Boxes for me");
         }
-        //manageCompletion(user);
+        manageCompletion(user);
         if (!matchMe) {
             matchUsers.setBackgroundColor(getResources().getColor(R.color.grey_theme));
             qrCodeBtn.setBackgroundColor(getResources().getColor(R.color.grey_theme));
@@ -82,21 +85,19 @@ public class HomePage extends AppCompatActivity {
         matchUsers.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                if (!matchMe) {
-//                    Toast.makeText(HomePage.this, "Please complete the above actions before proceeding", Toast.LENGTH_SHORT).show();
-//                } else {
-//                    if (matchMe && !user.isReady()) {
-//                        askIfReady();
-//                    }
-//                }
-//                if (dataBaseHandler.matchAlreadyFound(user.getId())) {
-//                    startIntent = new Intent(HomePage.this, MyMatches.class);
-//                    startIntent.putExtra("com.swansea.sindiso.user", user);
-//                    startActivity(startIntent);
-//                    overridePendingTransition(R.anim.slide_out_bottom, R.anim.slide_in_bottom);
-//                }
-                ThreeDimensionalBinPacker binPacker = new ThreeDimensionalBinPacker(HomePage.this, user, buildSpaces(user));
-                binPacker.pack();
+                if (!matchMe) {
+                    Toast.makeText(HomePage.this, "Please complete the above actions before proceeding", Toast.LENGTH_SHORT).show();
+                } else {
+                    if (matchMe && !user.isReady()) {
+                        askIfReady();
+                    }
+                }
+                if (dataBaseHandler.matchAlreadyFound(user.getId())) {
+                    startIntent = new Intent(HomePage.this, MyMatches.class);
+                    startIntent.putExtra("com.swansea.sindiso.user", user);
+                    startActivity(startIntent);
+                    overridePendingTransition(R.anim.slide_out_bottom, R.anim.slide_in_bottom);
+                }
             }
         });
 
@@ -147,7 +148,7 @@ public class HomePage extends AppCompatActivity {
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(HomePage.this);
         alertDialogBuilder.setMessage(R.string.ask_to_match)
                 .setTitle(R.string.match_dialog_title);
-        alertDialogBuilder.setPositiveButton(R.string.yes_option, new DialogInterface.OnClickListener() {
+        alertDialogBuilder.setPositiveButton(R.string.yes_to_match, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
                 user.setReady(true);
                 dataBaseHandler = new DataBaseHandler(HomePage.this);
@@ -156,7 +157,7 @@ public class HomePage extends AppCompatActivity {
                 matchUsers.setText("Manage My Storage");
             }
         });
-        alertDialogBuilder.setNegativeButton(R.string.no_option, new DialogInterface.OnClickListener() {
+        alertDialogBuilder.setNegativeButton(R.string.no_to_match, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
                 dialog.dismiss();
             }
@@ -195,7 +196,6 @@ public class HomePage extends AppCompatActivity {
         } else {
             if (user.isReady()) {
                 if (user.isStudent()) {
-//                    BinPacker binPacker = new BinPacker(HomePage.this, user, buildSpaces(user));
                     ThreeDimensionalBinPacker binPacker = new ThreeDimensionalBinPacker(HomePage.this, user, buildSpaces(user));
                     if (binPacker.pack()) {
                         notificationHeader.setText(getResources().getString(R.string.match_found));

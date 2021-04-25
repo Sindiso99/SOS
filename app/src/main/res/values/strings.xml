@@ -45,8 +45,15 @@
     <string name="not_ready">Please Complete the First 2 Actions</string>
     <string name="ready">Waiting For Your Best Match</string>
     <string name="match_found">You Have a New Match</string>
-    <string name="yes_option">Yes, match me</string>
-    <string name="no_option">No, not yet</string>
+    <string name="yes_to_match">Yes, match me</string>
+    <string name="no_to_match">No, not yet</string>
     <string name="ask_to_match">Would you like to start matching? Please note that you will not be able to alter your information hereafter. Your email will also be made visible to users you are matched.</string>
     <string name="match_dialog_title">Are You Ready</string>
+    <string name="register_holder">Registering as a holder means you agree to rent out your
+        applied space to students in need of space. Do you agree?</string>
+    <string name="register_student">Registering as a student means you agree to storing your
+        personal belongings in registered household owner\'s spaces. Do you agree?</string>
+    <string name="register_header">Register new Account?</string>
+    <string name="yes_to_register">Yes, I agree</string>
+    <string name="no_to_register">No, I do not agree</string>
 </resources>

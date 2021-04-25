@@ -35,7 +35,7 @@ public class ThreeDimensionalBinPacker {
 
     public boolean pack(){
         if(packer()){
-            if(fileHandler.writeFloorSpace(chosenHouse)/* && dataBaseHandler.addMatch(student.getId(), chosenHouse.getOwnerId())*/) {
+            if(fileHandler.writeFloorSpace(chosenHouse) && dataBaseHandler.addMatch(student.getId(), chosenHouse.getOwnerId())) {
                 return true;
             }
         }

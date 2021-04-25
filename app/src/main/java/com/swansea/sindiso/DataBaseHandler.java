@@ -244,6 +244,18 @@ public class DataBaseHandler extends SQLiteOpenHelper {
         return user;
     }
 
+    public boolean usernameTaken(String username) {
+        query = "SELECT * FROM " + USER_TABLE + " WHERE " + COLUMN_USER_NAME + " = '" + username + "'";
+        db = this.getReadableDatabase();
+        cursor = db.rawQuery(query, null);
+        if (cursor.moveToFirst()) {
+            return true;
+        } else {
+            return false;
+        }
+
+    }
+
     public boolean matchAlreadyFound(Integer userId) {
         query = "SELECT * FROM " + MATCH_TABLE + " WHERE " + COLUMN_STUDENT_ID + " = " + userId + " OR " + COLUMN_HOLDER_ID + " = " + userId;
         db = this.getReadableDatabase();

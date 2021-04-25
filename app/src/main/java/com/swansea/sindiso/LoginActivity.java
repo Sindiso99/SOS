@@ -1,5 +1,6 @@
 package com.swansea.sindiso;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -8,11 +9,10 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.IOException;
 
 public class LoginActivity extends AppCompatActivity {
     private boolean loginComplete = false;
@@ -25,9 +25,6 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-
-        DataBaseHandler dataBaseHandler = new DataBaseHandler(LoginActivity.this);
-
         userEditText = (EditText) findViewById(R.id.userNameTextBox);
         passwordEditText = (EditText) findViewById(R.id.PasswordTextBox);
         TextView loginOutput = (TextView) findViewById(R.id.loginOutcome);
@@ -48,7 +45,7 @@ public class LoginActivity extends AppCompatActivity {
                     }
                     if (loginComplete) {
                         startIntent = new Intent(LoginActivity.this, HomePage.class);
-                        startIntent.putExtra("com.swansea.sindiso.takeUser", user);
+                        startIntent.putExtra("com.swansea.sindiso.login", user);
                         startActivity(startIntent);
                         overridePendingTransition(R.anim.slide_out_bottom, R.anim.slide_in_bottom);
                     }
@@ -65,12 +62,11 @@ public class LoginActivity extends AppCompatActivity {
                 try {
                     String userName = userEditText.getText().toString();
                     String passWord = passwordEditText.getText().toString();
-                    user = new User(-1, userName, passWord, true, false);
-                    boolean complete = dataBaseHandler.addUser(user, false);
-                    if (complete){
-                        loginOutput.setText("Registered Successfully");
+                    DataBaseHandler dataBaseHandler = new DataBaseHandler(LoginActivity.this);
+                    if (dataBaseHandler.usernameTaken(userName)) {
+                        loginOutput.setText("Username already in use");
                     } else {
-                        loginOutput.setText("User Already Exists");
+                        askToAgree(userName, passWord, true);
                     }
                 } catch (Exception e) {
                     Toast.makeText(LoginActivity.this, R.string.missing_input, Toast.LENGTH_SHORT).show();
@@ -85,13 +81,11 @@ public class LoginActivity extends AppCompatActivity {
                 try {
                     String userName = userEditText.getText().toString();
                     String passWord = passwordEditText.getText().toString();
-                    user = new User(-1, userName, passWord, false, false);
                     DataBaseHandler dataBaseHandler = new DataBaseHandler(LoginActivity.this);
-                    boolean complete = dataBaseHandler.addUser(user, false);
-                    if (complete){
-                        loginOutput.setText("Registered Successfully");
+                    if (dataBaseHandler.usernameTaken(userName)) {
+                        loginOutput.setText("Username already in use");
                     } else {
-                        loginOutput.setText("User Already Exists");
+                        askToAgree(userName, passWord, false);
                     }
                 } catch (Exception e) {
                     Toast.makeText(LoginActivity.this, R.string.missing_input, Toast.LENGTH_SHORT).show();
@@ -108,19 +102,34 @@ public class LoginActivity extends AppCompatActivity {
             return ("Incorrect Username and Password");
         }
     }
-    
 
-    private String readFile(String fileName) {
-        StringBuilder sb = new StringBuilder();
-        try {
-            FileInputStream file = openFileInput(fileName);
-            int x;
-            while ((x = file.read()) != -1) {
-                sb.append((char) x);
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
+    private void askToAgree(String username, String password, boolean student) {
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(LoginActivity.this);
+        if (student){
+            alertDialogBuilder.setMessage(R.string.register_student);
+        } else {
+            alertDialogBuilder.setMessage(R.string.register_holder);
         }
-        return (sb.toString());
+        alertDialogBuilder.setTitle(R.string.register_header);
+        alertDialogBuilder.setPositiveButton(R.string.yes_to_register, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+                DataBaseHandler dataBaseHandler = new DataBaseHandler(LoginActivity.this);
+                user = new User(-1, username, password, student, false);
+                if (dataBaseHandler.addUser(user, false)){
+                    startIntent = new Intent(LoginActivity.this, HomePage.class);
+                    startIntent.putExtra("com.swansea.sindiso.newUser", user);
+                    startActivity(startIntent);
+                    overridePendingTransition(R.anim.slide_out_bottom, R.anim.slide_in_bottom);
+                }
+
+            }
+        });
+        alertDialogBuilder.setNegativeButton(R.string.no_to_register, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+        AlertDialog alert = alertDialogBuilder.create();
+        alert.show();
     }
 }
